@@ -1,55 +1,47 @@
 package com.epam.mjc.io;
 
-import java.io.*;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class FileReader {
 
     public Profile getDataFromFile(File file) {
-        Profile profile =new Profile();
-        String absolutePath ="/Users/symbatzinatova/IdeaProjects/stage1-module6-io-task1/src/main/resources/Profile.txt";
-
-        try(FileInputStream fileInputStream =new FileInputStream(file)){
-        int result;
-        while((result=fileInputStream.read()) !=-1){
-        System.out.print((char)result);
-
-    }
-    }catch (IOException e) {
-            throw new TestFileIncorrectException(e.getMessage());
-     }
-
-        try(FileOutputStream fileOutputStream=new FileOutputStream(absolutePath)){
-            String content =profile.toString();
-            fileOutputStream.write(content.getBytes());
-            String[] contents ="".split("\n");
-            for(String cont : contents){
-              String [] answer =cont.split(": ");
-                switch (answer[0]) {
-                    case "Name":
-                        profile.setName(answer[1]);
-                        break;
-                    case "Age":
-                        profile.setAge(Integer.parseInt(answer[2]));
-                        break;
-                    case "Email":
-                        profile.setEmail(answer[3]);
-                        break;
-                    case "Phone":
-                        profile.setPhone(Long.parseLong(answer[4]));
-                        break;
-                    default:
-                        break;
-
+        StringBuilder sb = new StringBuilder();
+        byte[] buffer = new byte[10];
+        try (FileInputStream fis = new FileInputStream(file)) {
+            while (fis.read(buffer) != -1) {
+                sb.append(new String(buffer));
+                buffer = new byte[10];
             }
-            }
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TestFileIncorrectException(e.getMessage());
         }
+        return getProfileFromRawString(sb.toString());
+    }
 
+    private Profile getProfileFromRawString(String fileString) {
+        String[] strings = fileString.split("\n");
+        Profile profile = new Profile();
+        for (String str : strings) {
+            String[] words = str.split(": ");
+            switch (words[0]) {
+                case "Name":
+                    profile.setName(words[1]);
+                    break;
+                case "Age":
+                    profile.setAge(Integer.parseInt(words[1]));
+                    break;
+                case "Email":
+                    profile.setEmail(words[1]);
+                    break;
+                case "Phone":
+                    profile.setPhone(Long.parseLong(words[1]));
+                    break;
+                default:
+                    break;
+            }
+        }
         return profile;
-         }
-         }
+    }
+}

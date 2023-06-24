@@ -11,6 +11,7 @@ public class Profile {
     private Long phone;
 
     public Profile() {
+        Profile profile=new Profile();
 
 
     }
