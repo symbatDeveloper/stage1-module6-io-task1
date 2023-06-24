@@ -1,5 +1,6 @@
 package com.epam.mjc.io;
 
+import java.io.FileOutputStream;
 import java.util.Objects;
 
 public class Profile {
@@ -10,6 +11,7 @@ public class Profile {
     private Long phone;
 
     public Profile() {
+
 
     }
     public Profile(String name, Integer age, String email, Long phone) {

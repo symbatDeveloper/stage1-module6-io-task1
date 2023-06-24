@@ -1,4 +1,1 @@
-Name: Anna
-Age: 25
-Email: anna@mailserver.com
-Phone: 1234567890
+Profile{name='null', age=null, email='null', phone=null}
